@@ -4,6 +4,9 @@ const http = require('http'); //core module
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const dishRouter=require('./routes/dishRouter');
+const promoRouter= require('./routes/promoRouter');
+const leaderRouter=require('./routes/leaderRouter');
+
 
 const hostname = 'localhost';
 const port = 3000;
@@ -14,6 +17,9 @@ app.use(morgan('dev')); //development version
 app.use(bodyParser.json());
 app.use('./dishes',dishRouter); //moount to end pt
 //any req coming to /dishes will be handled by dishRouter
+
+app.use('./promotions',promoRouter);
+app.use('./leaders',leaderRouter);
 
 
 
