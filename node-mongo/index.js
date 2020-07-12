@@ -8,9 +8,10 @@ const url = 'mongodb://localhost:27017/';
 const dbname = 'conFusion';//already created this db
 
 //access server
-MongoClient.connect(url,(err,client) => {
+MongoClient.connect(url).then((client) => {
+    //mongoclient returns client
 
-    assert.equal(err,null); //to check err is not null
+    // assert.equal(err,null); //to check err is not null
     //if no err
     console.log('Connected correctly to the server');
 
@@ -38,30 +39,36 @@ MongoClient.connect(url,(err,client) => {
     // });
 
     dboper.insertDocument(db, { name: "Vadonut", description: "Test"}, //db when we called mongoclient connect so noes where to access database
-    "dishes", (result) => {
+    "dishes",)
+    .then((result) => {
         console.log("Insert Document:\n", result.ops);
 
-        dboper.findDocuments(db, "dishes", (docs) => {
+       return  dboper.findDocuments(db, "dishes");
+    })
+    .then((docs) =>{
             console.log("Found Documents:\n", docs);
 
-            dboper.updateDocument(db, { name: "Vadonut" },
-                { description: "Updated Test" }, "dishes",
-                (result) => {
+           return dboper.updateDocument(db, { name: "Vadonut" },
+                { description: "Updated Test" }, "dishes");
+    })
+                .then((result) => {
                     console.log("Updated Document:\n", result.result);
 // fxn call inside fxn callback of the prrvious
-                    dboper.findDocuments(db, "dishes", (docs) => {
+                   return  dboper.findDocuments(db, "dishes");
+                })
+                    .then((docs) => {
                         console.log("Found Updated Documents:\n", docs);
                         
-                        db.dropCollection("dishes", (result) => {
+                        return db.dropCollection("dishes");
+                    })
+                        .then((result) => {
                             console.log("Dropped Collection: ", result);
 
-                            client.close(); // clean out dishes collection 
-                        });
-                    });
-                });
-            });
-        });
-    });
+                             return client.close(); // clean out dishes collection 
+                        })
+                   .catch((err) => console.log(err));
+                    })
+                    .catch((err) => console.log(err));
 
 
                 //dishes is the collections
