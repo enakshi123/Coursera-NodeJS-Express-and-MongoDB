@@ -39,7 +39,7 @@ MongoClient.connect(url).then((client) => {
     // });
 
     dboper.insertDocument(db, { name: "Vadonut", description: "Test"}, //db when we called mongoclient connect so noes where to access database
-    "dishes",)
+    "dishes")
     .then((result) => {
         console.log("Insert Document:\n", result.ops);
 
@@ -51,7 +51,7 @@ MongoClient.connect(url).then((client) => {
            return dboper.updateDocument(db, { name: "Vadonut" },
                 { description: "Updated Test" }, "dishes");
     })
-                .then((result) => {
+     .then((result) => {
                     console.log("Updated Document:\n", result.result);
 // fxn call inside fxn callback of the prrvious
                    return  dboper.findDocuments(db, "dishes");
